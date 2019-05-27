@@ -5,9 +5,7 @@
 #include <vector>
 #include <string>
 
-namespace FaceBlurLib{
-
-    std::vector<cv::Rect> DetectFaces(const std::string& imagePath);
+namespace FaceProcessingLib{
     void BlurFaces(cv::Mat& inputImage, const std::vector<cv::Rect>& faces);
 }
 

@@ -6,10 +6,10 @@ add_executable(FaceBlurDemo
         faceblurdemo.cpp)
 
 target_include_directories(FaceBlurDemo PUBLIC
-        ../FaceBlurLib/
+        ../FaceProcessingLib/
         )
 
 target_link_libraries(FaceBlurDemo
-        FaceBlurLib
+        FaceProcessingLib
         boost_system
         boost_filesystem)

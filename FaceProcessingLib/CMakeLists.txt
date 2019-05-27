@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 
-project(FaceBlurLib)
-
-set(CMAKE_VERBOSE_MAKEFILE ON)
+project(FaceProcessingLib)
 
 set(OpenCV_INCLUDES
         /usr/local/include/opencv4/
@@ -29,17 +27,24 @@ set(OpenCV_LIB_DIR
         /usr/local/lib
         )
 
-add_library(FaceBlurLib SHARED
+add_library(FaceProcessingLib SHARED
+        facedetector.hpp
+        facedetector.cpp
         faceblur.hpp
         faceblur.cpp)
 
-set_target_properties(FaceBlurLib PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(FaceProcessingLib PROPERTIES LINKER_LANGUAGE CXX)
 
-target_include_directories(FaceBlurLib PUBLIC
+target_include_directories(FaceProcessingLib PUBLIC
         /usr/local/include/opencv4/
         )
 
-target_link_libraries(FaceBlurLib
+target_link_libraries(FaceProcessingLib
         -L${OpenCV_LIB_DIR}
         ${OpenCV_LIBS}
+        )
+
+
+add_custom_command(TARGET FaceProcessingLib POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/resources ${CMAKE_BINARY_DIR}/bin/resources
         )

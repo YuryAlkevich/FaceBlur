@@ -12,4 +12,4 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
 
 add_subdirectory(FaceBlurDemo)
-add_subdirectory(FaceBlurLib)
+add_subdirectory(FaceProcessingLib)

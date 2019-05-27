@@ -1,14 +1,20 @@
 #include <iostream>
 #include <boost/filesystem.hpp>
 #include <boost/range/iterator_range.hpp>
+#include <boost/algorithm/string.hpp>
+#include <boost/property_tree/ptree.hpp>
 
 #include "faceblur.hpp"
+#include "facedetector.hpp"
 
+using namespace boost;
 using namespace boost::filesystem;
+using namespace FaceProcessingLib;
+using boost::property_tree::ptree;
 
 bool ValidateArgs(int argc, char *argv[]){
 
-    if(argc != 2){
+    if(argc < 2){
         return false;
     }
 
@@ -26,6 +32,15 @@ void PrintHelp(){
     std::cout << "Usage: ./FaceBlurDemo pathToImagesFolder" << std::endl;
 }
 
+bool IsImage(const path& filePath){
+    auto extensnion = filePath.extension().string();
+    return iequals(extensnion, ".jpg") || iequals(extensnion, ".png");
+}
+
+void WriteToJson(const ptree& pt, const std::string imagePath, const std::vector<cv::Rect>& faces){
+    ptree child;
+}
+
 int main(int argc, char *argv[]){
 
     if(ValidateArgs(argc, argv) == false){
@@ -35,11 +50,17 @@ int main(int argc, char *argv[]){
 
     path p{argv[1]};
 
+    FaceDetector faceDetector;
+
     for(auto& entry : boost::make_iterator_range(recursive_directory_iterator(p), {})){
-        auto faces = FaceBlurLib::DetectFaces(entry.path().string());
+
+        if(!IsImage(entry.path()))
+            continue;
+
+        auto faces = faceDetector.DetectFaces(entry.path().string());
 
         cv::Mat img = cv::imread(entry.path().string());
-        FaceBlurLib::BlurFaces(img, faces);
+        BlurFaces(img, faces);
         cv::resize(img, img, {img.cols / 2, img.rows / 2});
 
         cv::imshow("result", img);
