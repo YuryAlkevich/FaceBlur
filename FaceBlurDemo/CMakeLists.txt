@@ -9,6 +9,7 @@ add_executable(FaceBlurDemo
         )
 
 target_include_directories(FaceBlurDemo PUBLIC
+        ../ThirdParty/boost/include
         ../FaceProcessingLib/
         )
 
