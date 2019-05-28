@@ -14,7 +14,7 @@ set(OpenCV_LIBS
         )
 
 set(OpenCV_LIB_DIR
-        ../ThirdParty/opencv/lib/linux
+        ${CMAKE_CURRENT_SOURCE_DIR}/../ThirdParty/opencv/lib/linux
         )
 
 add_library(FaceProcessingLib SHARED
@@ -26,7 +26,7 @@ add_library(FaceProcessingLib SHARED
 set_target_properties(FaceProcessingLib PROPERTIES LINKER_LANGUAGE CXX)
 
 target_include_directories(FaceProcessingLib PUBLIC
-        /usr/local/include/opencv4/
+        ../ThirdParty/opencv/include
         )
 
 target_link_libraries(FaceProcessingLib
