@@ -2,15 +2,15 @@
 #include <boost/filesystem.hpp>
 #include <boost/range/iterator_range.hpp>
 #include <boost/algorithm/string.hpp>
-#include <boost/property_tree/ptree.hpp>
+#include <string>
 
 #include "faceblur.hpp"
 #include "facedetector.hpp"
+#include "faceserializer.hpp"
 
 using namespace boost;
 using namespace boost::filesystem;
 using namespace FaceProcessingLib;
-using boost::property_tree::ptree;
 
 bool ValidateArgs(int argc, char *argv[]){
 
@@ -37,10 +37,6 @@ bool IsImage(const path& filePath){
     return iequals(extensnion, ".jpg") || iequals(extensnion, ".png");
 }
 
-void WriteToJson(const ptree& pt, const std::string imagePath, const std::vector<cv::Rect>& faces){
-    ptree child;
-}
-
 int main(int argc, char *argv[]){
 
     if(ValidateArgs(argc, argv) == false){
@@ -48,11 +44,18 @@ int main(int argc, char *argv[]){
         exit(1);
     }
 
-    path p{argv[1]};
+    path sourceFolder{argv[1]};
+
+    const char* p = argc > 2 ? argv[2] : "./result";
+    path resultFolder {p};
+
+    create_directory(resultFolder);
 
     FaceDetector faceDetector;
+    FaceSerializer faceSerializer((resultFolder / "result.json").string());
 
-    for(auto& entry : boost::make_iterator_range(recursive_directory_iterator(p), {})){
+
+    for(auto& entry : boost::make_iterator_range(recursive_directory_iterator(sourceFolder), {})){
 
         if(!IsImage(entry.path()))
             continue;
@@ -63,7 +66,12 @@ int main(int argc, char *argv[]){
         BlurFaces(img, faces);
         cv::resize(img, img, {img.cols / 2, img.rows / 2});
 
-        cv::imshow("result", img);
-        cv::waitKey(0);
+        auto resultImgPath = (resultFolder / entry.path().filename()).string();
+        cv::imwrite(resultImgPath, img);
+
+
+        faceSerializer.AddFaces(entry.path().string(), entry.path().filename().string(), faces);
     }
+
+    faceSerializer.WriteToFile();
 }
