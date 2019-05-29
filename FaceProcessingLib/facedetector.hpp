@@ -3,8 +3,10 @@
 
 #include <opencv2/objdetect.hpp>
 
+#include "libdefines.hpp"
+
 namespace FaceProcessingLib{
-    class FaceDetector{
+    class EXPORT FaceDetector{
     public:
         FaceDetector();
         std::vector<cv::Rect> DetectFaces(const std::string& imagePath);

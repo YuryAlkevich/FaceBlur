@@ -1,0 +1,10 @@
+#ifndef FACEPROCESSINGLIB_LIBDEFINES_HPP
+#define FACEPROCESSINGLIB_LIBDEFINES_HPP
+
+#ifdef _WIN32
+#define EXPORT __declspec(dllexport)
+#else
+#define EXPORT
+#endif
+
+#endif //FACEPROCESSINGLIB_LIBDEFINES_HPP

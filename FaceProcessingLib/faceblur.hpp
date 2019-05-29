@@ -5,8 +5,10 @@
 #include <vector>
 #include <string>
 
+#include "libdefines.hpp"
+
 namespace FaceProcessingLib{
-    void BlurFaces(cv::Mat& inputImage, const std::vector<cv::Rect>& faces);
+    EXPORT void BlurFaces(cv::Mat& inputImage, const std::vector<cv::Rect>& faces);
 }
 
 

@@ -6,22 +6,38 @@ set(OpenCV_INCLUDES
         ../ThirdParty/opencv/include
         )
 
-set(OpenCV_LIBS
+if(WIN32)
+        set(OpenCV_LIBS
+                opencv_core410
+                opencv_imgcodecs410
+                opencv_imgproc410
+                opencv_objdetect410
+        )
+
+        set(CMAKE_SHARED_LINKER_FLAGS /LIBPATH:${CMAKE_CURRENT_SOURCE_DIR}/../ThirdParty/opencv/lib/win)
+        set(OpenCV_LIB_DIR
+        ${CMAKE_CURRENT_SOURCE_DIR}/../ThirdParty/opencv/lib/win)
+else()
+        set(OpenCV_LIBS
         opencv_core
         opencv_imgcodecs
         opencv_imgproc
         opencv_objdetect
         )
 
-set(OpenCV_LIB_DIR
-        ${CMAKE_CURRENT_SOURCE_DIR}/../ThirdParty/opencv/lib/linux
-        )
+        #link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../ThirdParty/opencv/lib/linux)
+        set(OpenCV_LIB_DIR
+        ${CMAKE_CURRENT_SOURCE_DIR}/../ThirdParty/opencv/lib/linux)
+endif()
+
 
 add_library(FaceProcessingLib SHARED
         facedetector.hpp
         facedetector.cpp
         faceblur.hpp
-        faceblur.cpp)
+        faceblur.cpp
+        libdefines.hpp
+        )
 
 set_target_properties(FaceProcessingLib PROPERTIES LINKER_LANGUAGE CXX)
 
@@ -30,7 +46,7 @@ target_include_directories(FaceProcessingLib PUBLIC
         )
 
 target_link_libraries(FaceProcessingLib
-        -L${OpenCV_LIB_DIR}
+        ${OpenCV_LIB_DIR}
         ${OpenCV_LIBS}
         )
 
@@ -40,5 +56,5 @@ add_custom_command(TARGET FaceProcessingLib POST_BUILD
         )
 
 add_custom_command(TARGET FaceProcessingLib POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/../ThirdParty/opencv/lib/linux ${CMAKE_BINARY_DIR}/bin/
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${OpenCV_LIB_DIR} ${CMAKE_BINARY_DIR}/bin/
         )
