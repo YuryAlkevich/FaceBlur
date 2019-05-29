@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 
 project(FaceBlurDemo LANGUAGES CXX)
 
-set(CMAKE_VERBOSE_MAKEFILE ON)
-
 add_executable(FaceBlurDemo
         faceblurdemo.cpp
         faceserializer.hpp
@@ -16,7 +14,7 @@ target_include_directories(FaceBlurDemo PUBLIC
         )
 
 if(WIN32)
-        add_compile_definitions(BOOST_ALL_DYN_LINK)
+        add_definitions(-DBOOST_ALL_DYN_LINK)
 
         set(BOOST_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../ThirdParty/boost/lib/win)
 
