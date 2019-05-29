@@ -7,27 +7,28 @@ set(OpenCV_INCLUDES
         )
 
 if(WIN32)
+        set(OpenCV_LIB_DIR
+                ${CMAKE_CURRENT_SOURCE_DIR}/../ThirdParty/opencv/lib/win)
+
         set(OpenCV_LIBS
                 opencv_core410
                 opencv_imgcodecs410
                 opencv_imgproc410
                 opencv_objdetect410
-        )
+                )
 
-        set(CMAKE_SHARED_LINKER_FLAGS /LIBPATH:${CMAKE_CURRENT_SOURCE_DIR}/../ThirdParty/opencv/lib/win)
-        set(OpenCV_LIB_DIR
-        ${CMAKE_CURRENT_SOURCE_DIR}/../ThirdParty/opencv/lib/win)
+        set(CMAKE_SHARED_LINKER_FLAGS /LIBPATH:${OpenCV_LIB_DIR})
 else()
-        set(OpenCV_LIBS
-        opencv_core
-        opencv_imgcodecs
-        opencv_imgproc
-        opencv_objdetect
-        )
-
-        #link_directories(${CMAKE_CURRENT_SOURCE_DIR}/../ThirdParty/opencv/lib/linux)
         set(OpenCV_LIB_DIR
-        ${CMAKE_CURRENT_SOURCE_DIR}/../ThirdParty/opencv/lib/linux)
+                ${CMAKE_CURRENT_SOURCE_DIR}/../ThirdParty/opencv/lib/linux)
+
+        set(OpenCV_LIBS
+                -L${OpenCV_LIB_DIR}
+                opencv_core
+                opencv_imgcodecs
+                opencv_imgproc
+                opencv_objdetect
+                )
 endif()
 
 
@@ -46,15 +47,14 @@ target_include_directories(FaceProcessingLib PUBLIC
         )
 
 target_link_libraries(FaceProcessingLib
-        ${OpenCV_LIB_DIR}
         ${OpenCV_LIBS}
         )
 
 
 add_custom_command(TARGET FaceProcessingLib POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/resources ${CMAKE_BINARY_DIR}/bin/resources
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/resources ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources
         )
 
 add_custom_command(TARGET FaceProcessingLib POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${OpenCV_LIB_DIR} ${CMAKE_BINARY_DIR}/bin/
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${OpenCV_LIB_DIR} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
         )

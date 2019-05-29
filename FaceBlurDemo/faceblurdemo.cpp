@@ -70,7 +70,7 @@ int main(int argc, char *argv[]){
         cv::imwrite(resultImgPath, img);
 
 
-        faceSerializer.AddFaces(entry.path().string(), entry.path().filename().string(), faces);
+        faceSerializer.AddFaces(absolute(entry.path()).string(), entry.path().filename().string(), faces);
     }
 
     faceSerializer.WriteToFile();
