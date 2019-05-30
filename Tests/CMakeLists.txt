@@ -6,6 +6,8 @@ add_executable(runTests
         testfacedetector.cpp
         )
 
+add_test(NAME FaceDetectorTest COMMAND runTests WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
+
 target_include_directories(runTests PUBLIC
         ../FaceProcessingLib/
         ../ThirdParty/googletest-release-1.8.1/googletest/include
